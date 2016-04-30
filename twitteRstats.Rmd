@@ -70,7 +70,7 @@ tweets_df %>%
   group_by(Date) %>%
   filter(retweetCount == max(retweetCount)) %>%
   select(Date, retweetCount, screenName, text) %>%
-  kable
+  kable(format = 'html')
 ```
 
 ## Most faved tweets (since `r Sys.Date() - 7`)
@@ -84,7 +84,7 @@ tweets_df %>%
   group_by(Date) %>%
   filter(favoriteCount == max(favoriteCount)) %>%
   select(Date, favoriteCount, screenName, text) %>%
-  kable
+  kable(format = 'html')
 ```
 
 ## Most active users (since `r Sys.Date() - 7`)
@@ -102,7 +102,7 @@ tweets_df %>%
   mutate(User = paste0('[', User, '](http://twitter.com/', User, ')'),
          `No.` = 1:10) %>%
   select(`No.`, 1:2) %>%
-  kable
+  kable(format = 'html')
 
 ```
 
