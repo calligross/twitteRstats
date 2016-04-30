@@ -1,8 +1,9 @@
 ---
 layout: page
-title:  "Tweetstatistics for #rstats"
+title:  "Daily 7day #rstats"
 ---
 
+These statistics are refreshed every day at midnight CET. The used scripts are on [github](https://github.com/calligross/twitteRstats). As always, pull requests are welcome.
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, 
