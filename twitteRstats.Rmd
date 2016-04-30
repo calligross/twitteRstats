@@ -1,0 +1,142 @@
+---
+layout: page
+title:  "Statistics for the laste 7 days about #rstats"
+---
+
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, 
+                      fig.path = 'figure/twitterstats-')
+bots <- c('Rbloggers', 'RLangTip', 'CRANberriesFeed', 'R_Programming')
+```
+
+```{r libraries}
+library(twitteR)
+library(dplyr)
+library(ggplot2)
+library(grid)
+library(png)
+library(jpeg)
+library(knitr)
+```
+
+
+```{r functions, eval=FALSE}
+downloadUserPics <- function(Users, dir = '.') {
+  downloadUserPic <- function(User, dir = '.') {
+    url <- getUser(User)$toDataFrame()$profileImageUrl
+    extension <- gsub('.*\\.', '', url)
+    file <- paste0(dir, '/', User, '.', extension)
+    download.file(url = url, destfile = file, quiet = TRUE)
+    return(file)
+  }
+  sapply(Users, function(x) downloadUserPic(x))
+}
+
+rasterUserPics <- function(images) {
+  extension <- gsub('.*\\.', '', images)
+  rasters <- list()
+  
+  for (i in 1:length(images)) {
+    if (extension[i] %in% c('jpg', 'jpeg')) {
+      rasters[[images[i]]] <- readJPEG(images[i])
+    }
+  }
+  return(rasters)
+}
+
+```
+
+```{r}
+# tweets <- Rtweets(since = '2016-04-22', n = 9999999)
+# store_tweets_db(tweets)
+register_sqlite_backend('tweets.db')
+tweets <- load_tweets_db()
+tweets_df <- twListToDF(tweets) %>% 
+  filter(as.Date(created) > (as.Date(Sys.Date()) - 7),
+         as.Date(created) < as.Date(Sys.Date()))
+```
+
+## Most active Users in the last seven days since `r Sys.Date() - 1`
+
+```{r MostTweetsByUser}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  group_by(screenName) %>%
+  summarise(n = n()) %>%
+  ungroup %>%
+  arrange(desc(n)) %>%
+  slice(1:10) %>%
+  rename(User = screenName, tweets = n) %>%
+  kable
+
+```
+
+## Most retweeted users
+
+```{r MostRetweetedUser}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  group_by(screenName) %>%
+  summarise(retweets = sum(retweetCount)) %>%
+  ungroup %>%
+  arrange(desc(retweets)) %>%
+  slice(1:10) %>%
+  mutate(screenName = factor(screenName, screenName)) %>%
+  ggplot(aes(x = screenName, y = retweets)) +
+  geom_bar(stat = 'identity') +
+  theme_bw()
+
+```
+
+## Most favourited users
+
+```{r MostFavouritedUser}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  group_by(screenName) %>%
+  summarise(favourited = sum(favoriteCount)) %>%
+  ungroup %>%
+  arrange(desc(favourited)) %>%
+  slice(1:10) %>%
+  mutate(screenName = factor(screenName, screenName)) %>%
+  ggplot(aes(x = screenName, y = favourited)) +
+  geom_bar(stat = 'identity') +
+  theme_bw()
+
+```
+
+## Most unique users per day
+
+```{r TweetersPerDay}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  mutate(Date = as.Date(created)) %>%
+  group_by(Date) %>%
+  summarise(Users = n_distinct(screenName)) %>%
+  ggplot(aes(x = Date, y = Users)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
+
+```
+
+## Number of tweets per day
+
+```{r tweets per day}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  mutate(Date = as.Date(created)) %>%
+  group_by(Date) %>%
+  summarise(Tweets = n()) %>%
+  ggplot(aes(x = Date, y = Tweets)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
+```
+
