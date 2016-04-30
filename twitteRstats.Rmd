@@ -111,7 +111,7 @@ tweets_df %>%
 
 ```
 
-## Most unique users per day (since `r Sys.Date() - 1`)
+## Unique users per day (since `r Sys.Date() - 1`)
 
 ```{r TweetersPerDay}
 tweets_df %>%
