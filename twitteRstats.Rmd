@@ -88,7 +88,7 @@ tweets_df %>%
   mutate(screenName = factor(screenName, screenName)) %>%
   ggplot(aes(x = screenName, y = retweets)) +
   geom_bar(stat = 'identity') +
-  theme_bw()
+  theme_bw() + theme(axis.text.x = element_text(angle = 90))
 
 ```
 
@@ -106,7 +106,7 @@ tweets_df %>%
   mutate(screenName = factor(screenName, screenName)) %>%
   ggplot(aes(x = screenName, y = favourited)) +
   geom_bar(stat = 'identity') +
-  theme_bw()
+  theme_bw() + theme(axis.text.x = element_text(angle = 90))
 
 ```
 
