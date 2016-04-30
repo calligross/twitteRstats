@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Daily 7day #rstats"
+title:  "7-days #rstats"
 ---
 
 These statistics are refreshed every day at midnight CET. The used scripts are on [github](https://github.com/calligross/twitteRstats). As always, pull requests are welcome.
@@ -75,7 +75,7 @@ tweets_df %>%
 
 ```
 
-## Most retweeted users (since `r Sys.Date() - 1`)
+## Most retweeted users (since `r Sys.Date() - 7`)
 
 ```{r MostRetweetedUser}
 tweets_df %>%
@@ -93,7 +93,7 @@ tweets_df %>%
 
 ```
 
-## Most favourited users (since `r Sys.Date() - 1`)
+## Most favourited users (since `r Sys.Date() - 7`)
 
 ```{r MostFavouritedUser}
 tweets_df %>%
@@ -111,7 +111,7 @@ tweets_df %>%
 
 ```
 
-## Unique users per day (since `r Sys.Date() - 1`)
+## Unique users per day (since `r Sys.Date() - 7`)
 
 ```{r TweetersPerDay}
 tweets_df %>%
@@ -127,7 +127,7 @@ tweets_df %>%
 
 ```
 
-## Number of tweets per day (since `r Sys.Date() - 1`)
+## Number of tweets per day (since `r Sys.Date() - 7`)
 
 ```{r tweets per day}
 tweets_df %>%
