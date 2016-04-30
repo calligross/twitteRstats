@@ -108,7 +108,7 @@ tweets_df %>%
   mutate(User = paste0('[', User, '](http://twitter.com/', User, ')'),
          `No.` = 1:10) %>%
   select(`No.`, 1:2) %>%
-  kable(format = 'html')
+  kable(format = 'markdown')
 
 ```
 
