@@ -70,6 +70,9 @@ tweets_df %>%
   group_by(Date) %>%
   filter(retweetCount == max(retweetCount)) %>%
   select(Date, retweetCount, screenName, text) %>%
+  rename(`RT count` = retweetCount,
+         User = screenName,
+         Text = text) %>%
   kable(format = 'html')
 ```
 
@@ -84,6 +87,9 @@ tweets_df %>%
   group_by(Date) %>%
   filter(favoriteCount == max(favoriteCount)) %>%
   select(Date, favoriteCount, screenName, text) %>%
+  rename(`Fav count` = favoriteCount,
+         User = screenName,
+         Text = text) %>%
   kable(format = 'html')
 ```
 
