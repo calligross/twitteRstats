@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Statistics for the laste 7 days about #rstats"
+title:  "Tweetstatistics for #rstats"
 ---
 
 
