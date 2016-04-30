@@ -58,7 +58,7 @@ tweets_df <- twListToDF(tweets) %>%
          as.Date(created) < as.Date(Sys.Date()))
 ```
 
-## Most active Users (since `r Sys.Date() - 1`)
+## Most active Users (since `r Sys.Date() - 7`)
 
 ```{r MostTweetsByUser}
 tweets_df %>%
@@ -70,7 +70,9 @@ tweets_df %>%
   arrange(desc(n)) %>%
   slice(1:10) %>%
   rename(User = screenName, tweets = n) %>%
-  mutate(User = paste0('[', User, '](http://twitter.com/', User, ')')) %>%
+  mutate(User = paste0('[', User, '](http://twitter.com/', User, ')'),
+         `No.` = 1:10) %>%
+  select(`No.`, 1:2) %>%
   kable
 
 ```
