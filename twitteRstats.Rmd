@@ -8,7 +8,7 @@ These statistics are refreshed every day at midnight CET. The used scripts are o
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 10, 
                       fig.path = 'figure/twitterstats-')
-bots <- c('Rbloggers', 'RLangTip', 'CRANberriesFeed', 'R_Programming')
+bots <- c('Rbloggers', 'RLangTip', 'CRANberriesFeed', 'R_Programming', 'SemanticEarth')
 ```
 
 ```{r libraries}
@@ -54,11 +54,40 @@ rasterUserPics <- function(images) {
 register_sqlite_backend('tweets.db')
 tweets <- load_tweets_db()
 tweets_df <- twListToDF(tweets) %>% 
-  filter(as.Date(created) > (as.Date(Sys.Date()) - 7),
-         as.Date(created) < as.Date(Sys.Date()))
+  filter(as.Date(created) >= (as.Date(Sys.Date()) - 7),
+         as.Date(created) < as.Date(Sys.Date())) %>%
+  mutate(text = iconv(text, 'UTF-8', 'ASCII', sub = ''))
 ```
 
-## Most active Users (since `r Sys.Date() - 7`)
+## Most retweeted tweets (since `r Sys.Date() - 7`)
+
+```{r MostRetweetedTweets}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  filter(!grepl('^RT', text)) %>%
+  mutate(Date = as.Date(created)) %>%
+  group_by(Date) %>%
+  filter(retweetCount == max(retweetCount)) %>%
+  select(Date, retweetCount, screenName, text) %>%
+  kable
+```
+
+## Most faved tweets (since `r Sys.Date() - 7`)
+
+```{r MostFavedTweets}
+tweets_df %>%
+  filter(!screenName  %in% bots) %>%
+  filter(isRetweet == FALSE) %>%
+  filter(!grepl('^RT', text)) %>%
+  mutate(Date = as.Date(created)) %>%
+  group_by(Date) %>%
+  filter(favoriteCount == max(favoriteCount)) %>%
+  select(Date, favoriteCount, screenName, text) %>%
+  kable
+```
+
+## Most active users (since `r Sys.Date() - 7`)
 
 ```{r MostTweetsByUser}
 tweets_df %>%
