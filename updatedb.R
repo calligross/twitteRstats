@@ -1,7 +1,8 @@
 library(twitteR)
 library(knitr)
-source('~mg/twitter.auth')
-blog_dir <- '~mg/Documents/R/test/'
+setwd('.')
+source('../twitter.auth')
+blog_dir <- '~mg/R/Blog/'
 
 setup_twitter_oauth(consumer_key = consumer_key,
                     consumer_secret = consumer_secret,
