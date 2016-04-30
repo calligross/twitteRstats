@@ -12,13 +12,16 @@ setup_twitter_oauth(consumer_key = consumer_key,
 register_sqlite_backend('tweets.db')
 tweets <- load_tweets_db(as.data.frame = TRUE)
 tweets_new <- Rtweets(sinceID = max(tweets$id), n = 2000)
-store_tweets_db(tweets_new)
+if (length(tweets_new) > 0) {
+  store_tweets_db(tweets_new)
+  # update the posting
+  
+  knitr::knit(input = 'twitteRstats.Rmd', output = 'twitteRstats.md', quiet = TRUE)
+  
+  files <- c('twitteRstats.md', list.files(path = 'figure', full.names = TRUE)) 
+  
+  # the blog_dir and a subdirectory figure need to exist!
+  file.copy(from = files, to = paste0(blog_dir, files), overwrite = TRUE)
+  
+}
 
-# update the posting
-
-knitr::knit(input = 'twitteRstats.Rmd', output = 'twitteRstats.md', quiet = TRUE)
-
-files <- c('twitteRstats.md', list.files(path = 'figure', full.names = TRUE)) 
-
-# the blog_dir and a subdirectory figure need to exist!
-file.copy(from = files, to = paste0(blog_dir, files), overwrite = TRUE)
