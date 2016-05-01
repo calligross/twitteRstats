@@ -50,7 +50,7 @@ text2markdown <- function(text) {
   text <- gsub('\n', '', text)
   text <- gsub('(https://)([[:alnum:]\\./:]+)', '[\\2](\\1\\2)', text, ignore.case = TRUE)
   text <- gsub('(#)([[:alnum:]]+)', '[\\1\\2](https://twitter.com/hashtag/\\2?src=hash)', text)
-  text <- gsub('@([[:alnum:]]+)', '[\\1](https://twitter.com/\\1)', text)
+  text <- gsub('(@)([[:alnum:]]+)', '[\\1\\2](https://twitter.com/\\2)', text)
 
   return(text)
 }
