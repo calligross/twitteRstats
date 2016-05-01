@@ -22,7 +22,7 @@ library(knitr)
 ```
 
 
-```{r functions, eval=FALSE}
+```{r functions}
 downloadUserPics <- function(Users, dir = '.') {
   downloadUserPic <- function(User, dir = '.') {
     url <- getUser(User)$toDataFrame()$profileImageUrl
