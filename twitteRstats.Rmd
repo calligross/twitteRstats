@@ -46,6 +46,15 @@ rasterUserPics <- function(images) {
   return(rasters)
 }
 
+text2markdown <- function(text) {
+  text <- gsub('\n', '', text)
+  text <- gsub('(https://)([[:alnum:]\\./:]+)', '[\\2](\\1\\2)', text, ignore.case = TRUE)
+  text <- gsub('(#)([[:alnum:]]+)', '[\\1\\2](https://twitter.com/hashtag/\\2?src=hash)', text)
+  text <- gsub('@([[:alnum:]]+)', '[\\1](https://twitter.com/\\1)', text)
+
+  return(text)
+}
+
 ```
 
 ```{r}
@@ -56,7 +65,8 @@ tweets <- load_tweets_db()
 tweets_df <- twListToDF(tweets) %>% 
   filter(as.Date(created) >= (as.Date(Sys.Date()) - 7),
          as.Date(created) < as.Date(Sys.Date())) %>%
-  mutate(text = iconv(text, 'UTF-8', 'ASCII', sub = ''))
+  mutate(text = iconv(text, 'UTF-8', 'ASCII', sub = '')) %>%
+  arrange(created)
 ```
 
 ## Most retweeted tweets (since `r Sys.Date() - 7`)
@@ -69,11 +79,13 @@ tweets_df %>%
   mutate(Date = as.Date(created)) %>%
   group_by(Date) %>%
   filter(retweetCount == max(retweetCount)) %>%
+  mutate(text = text2markdown(text)) %>%
   select(Date, retweetCount, screenName, text) %>%
   rename(`RT count` = retweetCount,
          User = screenName,
          Text = text) %>%
-  kable(format = 'html')
+  mutate(User = paste0('[', User, '](http://twitter.com/', User, ')')) %>%
+  kable
 ```
 
 ## Most faved tweets (since `r Sys.Date() - 7`)
@@ -87,10 +99,12 @@ tweets_df %>%
   group_by(Date) %>%
   filter(favoriteCount == max(favoriteCount)) %>%
   select(Date, favoriteCount, screenName, text) %>%
+  mutate(text = text2markdown(text)) %>%
   rename(`Fav count` = favoriteCount,
          User = screenName,
          Text = text) %>%
-  kable(format = 'html')
+  mutate(User = paste0('[', User, '](http://twitter.com/', User, ')')) %>%
+  kable(format = 'markdown')
 ```
 
 ## Most active users (since `r Sys.Date() - 7`)
