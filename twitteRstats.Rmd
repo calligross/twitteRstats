@@ -132,6 +132,7 @@ tweets_df %>%
 tweets_df %>%
   filter(!screenName  %in% bots) %>%
   filter(isRetweet == FALSE) %>%
+  filter(!grepl('^RT', text)) %>%
   group_by(screenName) %>%
   summarise(retweets = sum(retweetCount)) %>%
   ungroup %>%
@@ -150,6 +151,7 @@ tweets_df %>%
 tweets_df %>%
   filter(!screenName  %in% bots) %>%
   filter(isRetweet == FALSE) %>%
+  filter(!grepl('^RT', text)) %>%
   group_by(screenName) %>%
   summarise(favourited = sum(favoriteCount)) %>%
   ungroup %>%
