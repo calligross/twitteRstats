@@ -1,6 +1,6 @@
 library(twitteR)
 library(knitr)
-setwd('.')
+setwd('~mg/R/twitteRstats')
 source('../twitter.auth')
 blog_dir <- '~mg/R/Blog/'
 
