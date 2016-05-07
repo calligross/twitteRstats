@@ -1,4 +1,4 @@
-files <- list.files(pattern = '*.\\.R')
+files <- list.files(pattern = '*.\\.R(md)?$', path = '~/R/twitteRstats', full.names = TRUE)
 
 libs <- NULL
 
@@ -17,5 +17,7 @@ installed <- installed[, 1]
 missing <- libs[!libs %in% installed]
 
 if (length(missing) > 0) {
+  options(download.file.method = "libcurl")
   install.packages(missing, repos = "https://cran.rstudio.com/")
 }
+
