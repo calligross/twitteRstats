@@ -1,6 +1,7 @@
 #!/bin/bash
 cd ~/R/twitteRstats
 git pull origin master
+R CMD BATCH checkPackages.R
 R CMD BATCH updatedb.R 
 git add tweets.db
 git commit -m 'updated tweets.db'
