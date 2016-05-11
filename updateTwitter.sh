@@ -12,5 +12,5 @@ git pull origin master
 # cp ../twitteRstats/figure/twitterstats-* figure/
 git add figure/twitterstats-*
 git add twitteRstats.md 
-git commit -m "Udpated twitterstats"
+git commit -m "Updated twitterstats"
 git push origin master
